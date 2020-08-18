@@ -1,5 +1,6 @@
 # cms.experiments
 **基于OPTICS密度聚类的变电设备状态监测异常点检测算法**
+
 网上很多关于OPTICS的介绍，这里做一个整理和自己的理解。
 OPTICS是 Ordering Point To Idenfy the Cluster Structure 缩写。它是DBSCAN算法的一种改进算法，与DBSCAN算法相比，OPTICS算法对输入参数不敏感。
 OPTICS算法不显式生成数据聚类，它对数据对象集合进行排序，得到一个有序的对象列表，但其中包含足够的信息来提取聚类 Cluster。所以针对它的这一特性，还可以对数据的分布和关联做进一步分析，它的排序队列可以应用到多领域的数据挖掘和分析中。
@@ -32,8 +33,9 @@ struct datapoint{
 datasets = set{ datapoint };
 seedList 按可达距离排序队列
 dpQue 核心对象队列
+```
 step 1.找到数据集中的核心对象
-
+```
 isCoreObject(datapoint, dataset)
 {
 for(dp : datasets)
