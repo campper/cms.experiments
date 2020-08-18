@@ -56,6 +56,9 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
+*.sln
+*.vcxproj
+*.filters
 
 # Chutzpah Test files
 _Chutzpah*
@@ -187,3 +190,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+.gitignore
