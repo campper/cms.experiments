@@ -20,7 +20,7 @@ minPts：如果对象的 ε 领域内至少包含最小数据minPts个对象，�
 ##  2.算法描述
 OPTICS 算法的目标是输出数据集合datasets各元素的有序排列和每个元素的两个属性：core-distance, reachability-distance
 伪代码：
-```
+```C++
 struct datapoint{
      double* data;
      double reachable_distance;
@@ -28,7 +28,7 @@ struct datapoint{
 };
 ```
 核心流程：
-```
+```C++
 datasets = set{ datapoint };
 seedList 按可达距离排序队列
 dpQue 核心对象队列
@@ -57,7 +57,8 @@ if(reacharrivableObject.size() >= minPts)
 }
 ```
 step 2. 从核心对象的数据点出发，按照可达距离寻找非核心对象点,形成 seedList. 此过程中，dpQue在UNDEFINED标签datapoint加入后要进行从新排序
-```
+
+```C++
 while(dpQue.IsNotEmpty())
 {
     currentCorePoint = dpQue[0]; //取出第一个核心对象
@@ -91,5 +92,5 @@ step 3. 整个遍历后的dpQue，输出按可达距离排序的 seedList
     2.可达距离是不可能小于核心距离的，满足核心距离的条件是：只要核心对象在ε 领域内的对象数量多于minPts时，满足条件的距离即是核心距离，它不一定比给定的ε 大，可能刚好等于ε ，也可能小于ε 。这取决于minPts参数的选定。
 
     3.我们在选取核心对象的时候，只要满足minPts条件即可，不是必须找到核心对象内所有数量的对象再计算最大距离，那样的结果是核心距离=ε 。所以核心距离在OPTICS聚类中不是决定对象归属哪个簇的决定性因素，而是决定核心对象数量的参数。重要的是核心对象的可达距离才是决定其他对象归属于核心对象簇的决定性因素。
-    
+
     4.形象的说：核心距离更像是密度特征（即我内核元素必须满足的条件或我成为核心对象的条件），可达距离更像是基于此密度的延伸（从内核分裂出去找寻属于自己对象簇元素的抓手）。所以OPTICS可以发掘任意形状簇，但对于每个形状簇的解释还需要进一步分析。
