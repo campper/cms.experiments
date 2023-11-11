@@ -5,24 +5,32 @@
 OPTICS是 Ordering Point To Idenfy the Cluster Structure 缩写。它是DBSCAN算法的一种改进算法，与DBSCAN算法相比，OPTICS算法对输入参数不敏感。
 OPTICS算法不显式生成数据聚类，它对数据对象集合进行排序，得到一个有序的对象列表，但其中包含足够的信息来提取聚类 Cluster。所以针对它的这一特性，还可以对数据的分布和关联做进一步分析，它的排序队列可以应用到多领域的数据挖掘和分析中。
 ##  1.基本概念
-ε：给定对象半径 ε 内的邻域称为该对象的 ε 邻域
+$ \varepsilon $：给定对象半径 $ \varepsilon $ 内的邻域称为该对象的 $ \varepsilon $ 邻域
 
-minPts：如果对象的 ε 领域内至少包含最小数据minPts个对象，则该对象成为 核心对象。
-直接密度可达距离(reachable-distance)： 1) max(core-distance,distance(p,q)),即p到q的距离小于  ε，这里的距离一般指欧式距离。
-                                                           2) p 的 ε 邻域的对象数量>=minPts
-### 公式：
-    reachability-distance(p,q) = _| UNDEFINED |Nε(p)| < minPts
-                                              | max{core-distance(p), distance(p,q)} |Nε(p)| >= minPts
+$ minPts $ ：如果对象的 $ \varepsilon $ 领域内至少包含最小数据 $ minPts $ 个对象，则该对象成为 核心对象。
+直接密度可达距离( $ reachable-distance $)： 
+1) $ max(core-distance,distance(p,q)) $,即 $ p $ 到 $ q $ 的距离小于  $ \varepsilon $，这里的距离一般指欧式距离。
+2) $ p $ 的 $ \varepsilon $ 邻域的对象数量 $ \geqslant minPts $
+### 公式
+
+$$ reachability-distance(p,q) = \begin{cases}
+                                UNDEFINED \space if \lvert N_{\varepsilon}(p) \rvert < MinPts \\
+                                max{core-distance(p), distance(p,q)} \space \lvert N_{\varepsilon}(p) \rvert \geqslant minPts 
+                                \end{cases} $$
     核心距离(core-distance)： p 为核心对象的 min( ε ) 使得 p 成为核心对象的最小邻域半径为核心距离
-### 公式：                                     
-    core-distance(p) = _| UNDEFINED  |Nε(p)| < minPts 
-                                 | min(p, Nε(p)) |Nε(p)| >= minPts
+### 公式
+$$
+    core-distance(p) = \begin{cases}
+    UNDEFINED \space if \space \lvert N_{\varepsilon}(p) \rvert \lt minPts \\
+     min(p, N_{\varepsilon}(p)) \space \lvert N_{\varepsilon}(p) \rvert \geqslant minPts
+     \end{cases}
+$$
     OPTICS算法生成一个有序对象列表，每个对象拥有两个属性，核心距离和可达距离。利用这两个列表可以获得任何邻域半径<  ε 的聚类
 
 ##  2.算法描述
 OPTICS 算法的目标是输出数据集合datasets各元素的有序排列和每个元素的两个属性：core-distance, reachability-distance
 伪代码：
-```C++
+``` C++
 struct datapoint{
      double* data;
      double reachable_distance;
@@ -30,7 +38,7 @@ struct datapoint{
 };
 ```
 核心流程：
-```C++
+``` C++
 datasets = set{ datapoint };
 seedList 按可达距离排序队列
 dpQue 核心对象队列
@@ -61,7 +69,7 @@ if(reacharrivableObject.size() >= minPts)
 ```
 step 2. 从核心对象的数据点出发，按照可达距离寻找非核心对象点,形成 seedList. 此过程中，dpQue在UNDEFINED标签datapoint加入后要进行从新排序
 
-```C++
+``` C++
 while(dpQue.IsNotEmpty())
 {
     currentCorePoint = dpQue[0]; //取出第一个核心对象
